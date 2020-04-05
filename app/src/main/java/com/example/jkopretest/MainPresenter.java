@@ -2,7 +2,11 @@ package com.example.jkopretest;
 
 import androidx.annotation.NonNull;
 
+import com.example.jkopretest.data.Chat;
+import com.example.jkopretest.data.source.ChatDataSource;
 import com.example.jkopretest.data.source.ChatRepository;
+
+import java.util.List;
 
 class MainPresenter implements MainContract.Presenter{
 
@@ -15,4 +19,18 @@ class MainPresenter implements MainContract.Presenter{
         mChatRepository = chatRepository;
     }
 
+    @Override
+    public void getFakeData() {
+        mChatRepository.getChatList(new ChatDataSource.LoadChatsCallback() {
+            @Override
+            public void onChatsLoaded(List<Chat> chatList) {
+                mMainView.showChatMessage(chatList);
+            }
+
+            @Override
+            public void onDataNotAvailable(boolean isNetworkError) {
+                //FIXME
+            }
+        });
+    }
 }

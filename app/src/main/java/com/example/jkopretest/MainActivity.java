@@ -1,6 +1,8 @@
 package com.example.jkopretest;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.text.Editable;
@@ -10,7 +12,10 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.example.jkopretest.data.Chat;
 import com.example.jkopretest.data.Injection;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements MainContract.View{
 
@@ -23,7 +28,13 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mMainPresenter = new MainPresenter(Injection.provideChatRepository(this), this);
+        buildRecyclerView();
         buildInputBar();
+        mMainPresenter.getFakeData();
+    }
+
+    private void buildRecyclerView(){
+        //RecyclerView recyclerView = findViewById(R.id.re)
     }
 
     private void buildInputBar(){
@@ -57,4 +68,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     }
 
 
+    @Override
+    public void showChatMessage(@NonNull List<Chat> chatList) {
+    }
 }

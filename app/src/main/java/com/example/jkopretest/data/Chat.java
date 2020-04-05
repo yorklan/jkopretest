@@ -8,7 +8,9 @@ import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Final model class for Chat
@@ -22,9 +24,14 @@ public final class Chat {
     private final Date createdAt;
 
     @NonNull
-    @ColumnInfo(name = "name")
-    @SerializedName("name")
-    private final String name;
+    @ColumnInfo(name = "id")
+    @SerializedName("id")
+    private final String id;
+
+    @NonNull
+    @ColumnInfo(name = "message")
+    @SerializedName("message")
+    private final String message;
 
     @Nullable
     @ColumnInfo(name = "avatar")
@@ -39,14 +46,15 @@ public final class Chat {
      * The constructor to build the data
      *
      * @param createdAt     when this chat was sent
-     * @param name          the user who sent this chat
+     * @param id          the user who sent this chat
      * @param avatar        url of the avatar
      * @param isRead        has the user read this chat
      */
-    public Chat(Date createdAt, @NonNull String name,
-                 @Nullable String avatar, boolean isRead) {
+    public Chat(Date createdAt, @NonNull String id,
+                 @NonNull String message, @Nullable String avatar, boolean isRead) {
         this.createdAt = createdAt;
-        this.name = name;
+        this.id = id;
+        this.message = message;
         this.avatar = avatar;
         this.isRead = isRead;
     }
@@ -56,8 +64,13 @@ public final class Chat {
     }
 
     @NonNull
-    public String getName() {
-        return name;
+    public String getId() {
+        return id;
+    }
+
+    @NonNull
+    public String getMessage() {
+        return message;
     }
 
     @Nullable
@@ -67,5 +80,14 @@ public final class Chat {
 
     public boolean isRead() {
         return isRead;
+    }
+
+    public boolean isMe(){
+        return id.isEmpty();
+    }
+
+    public String getTimeString() {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm", Locale.getDefault());
+        return simpleDateFormat.format(createdAt);
     }
 }

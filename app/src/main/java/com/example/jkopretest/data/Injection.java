@@ -15,7 +15,7 @@ public class Injection {
     public static ChatRepository provideChatRepository(@NonNull Context context) {
         JkoTestDatabase database = JkoTestDatabase.getInstance(context);
         return ChatRepository.getInstance(
-                ChatRemoteDataSource.getInstance(),
+                ChatRemoteDataSource.getInstance(context),
                 ChatLocalDataSource.getInstance(new GlobalExecutors(), database.chatDao()));
     }
 }
