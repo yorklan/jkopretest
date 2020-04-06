@@ -31,7 +31,7 @@ public class ChatRemoteDataSource implements ChatDataSource {
     private InputStream XmlFileInputStream;
 
     private ChatRemoteDataSource(Context context){
-        //XmlFileInputStream = context.getResources().openRawResource(R.raw.fakedata);
+        XmlFileInputStream = context.getResources().openRawResource(R.raw.fakedata);
     }
 
     public static synchronized ChatRemoteDataSource getInstance(Context context) {

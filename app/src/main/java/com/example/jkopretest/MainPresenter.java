@@ -1,5 +1,7 @@
 package com.example.jkopretest;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import com.example.jkopretest.data.Chat;
@@ -29,7 +31,7 @@ class MainPresenter implements MainContract.Presenter{
 
             @Override
             public void onDataNotAvailable(boolean isNetworkError) {
-                //FIXME
+
             }
         });
     }

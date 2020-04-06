@@ -5,6 +5,7 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="@dimen/card_height"
+    android:layout_margin="@dimen/margin_smallest"
     android:gravity="end"
     tools:ignore="UseCompoundDrawables">
 
@@ -12,24 +13,23 @@
         android:id="@+id/text_me_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:textSize="@dimen/card_time"/>
+        style="@style/TextTime"/>
 
     <ImageView
         android:id="@+id/img_me_read"
         android:layout_width="@dimen/card_read"
         android:layout_height="@dimen/card_read"
         android:layout_gravity="bottom"
+        android:layout_marginStart="@dimen/margin_smallest"
+        android:layout_marginEnd="@dimen/margin_smallest"
+        android:layout_marginBottom="3dp"
         android:contentDescription="@null" />
 
     <TextView
         android:id="@+id/text_me_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:minHeight="@dimen/card_height"
-        android:gravity="center"
-        android:singleLine="false"
-        android:paddingStart="@dimen/margin_smallest"
-        android:paddingEnd="@dimen/margin_smallest"/>
+        android:background="@drawable/background_message_me"
+        style="@style/TextMessage"/>
 
 </LinearLayout>

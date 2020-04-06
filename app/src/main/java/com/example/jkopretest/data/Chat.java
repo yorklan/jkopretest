@@ -87,7 +87,7 @@ public final class Chat {
     }
 
     public String getTimeString() {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm", Locale.getDefault());
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
         return simpleDateFormat.format(createdAt);
     }
 }

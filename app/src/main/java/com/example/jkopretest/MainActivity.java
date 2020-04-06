@@ -2,6 +2,7 @@ package com.example.jkopretest;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
@@ -21,6 +22,8 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
 
     private MainPresenter mMainPresenter;
 
+    private MainAdapter mMainAdapter;
+
     private ImageView mImgSend, mImgRecord;
 
     @Override
@@ -34,7 +37,18 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     }
 
     private void buildRecyclerView(){
-        //RecyclerView recyclerView = findViewById(R.id.re)
+        RecyclerView recyclerView = findViewById(R.id.recycler_view_main);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        mMainAdapter = new MainAdapter();
+        mMainAdapter.setOnItemClickListener(new MainAdapter.OnItemClickListener() {
+            @Override
+            public void onItemLongClick(@NonNull Chat drama) {
+
+            }
+        });
+        recyclerView.setAdapter(mMainAdapter);
     }
 
     private void buildInputBar(){
@@ -50,11 +64,9 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if(s==null || s.toString().isEmpty()){
-                    Log.e("test","1");
                     mImgSend.setImageDrawable(getDrawable(R.drawable.ic_nut));
                     mImgRecord.setVisibility(View.VISIBLE);
                 }else {
-                    Log.e("test","2");
                     mImgSend.setImageDrawable(getDrawable(R.drawable.ic_send));
                     mImgRecord.setVisibility(View.GONE);
                 }
@@ -70,5 +82,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
 
     @Override
     public void showChatMessage(@NonNull List<Chat> chatList) {
+        mMainAdapter.updateData(chatList);
+        mMainAdapter.notifyDataSetChanged();
     }
 }

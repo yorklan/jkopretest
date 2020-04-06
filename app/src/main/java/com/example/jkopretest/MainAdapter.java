@@ -87,7 +87,7 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
     private void setUserViewHolder(UserViewHolder userViewHolder, Chat chat){
         Glide.with(userViewHolder.itemView.getContext())
-                .load(chat.getAvatar())
+                .load(R.drawable.ic_avatar) // fake data
                 .circleCrop()
                 .into(userViewHolder.imgAvatar);
         userViewHolder.textMessage.setText(chat.getMessage());
@@ -104,6 +104,24 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
     @Override
     public int getItemCount() {
-        return mChatList.size();
+        return mChatList.size()-1;
+    }
+
+    /**
+     * Public Methods
+     **/
+    private OnItemClickListener onItemLongClickListener = null;
+
+    public interface OnItemClickListener {
+        void onItemLongClick(@NonNull Chat drama);
+    }
+
+    void setOnItemClickListener(OnItemClickListener listener) {
+        onItemLongClickListener = listener;
+    }
+
+    void updateData(List<Chat> newDramaList) {
+        mChatList.clear();
+        mChatList.addAll(newDramaList);
     }
 }

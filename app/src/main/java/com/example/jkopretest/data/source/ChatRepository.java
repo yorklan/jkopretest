@@ -30,7 +30,7 @@ public class ChatRepository implements ChatDataSource{
 
     @Override
     public void getChatList(@NonNull LoadChatsCallback callback) {
-
+        mChatRemoteDataSource.getChatList(callback);
     }
 
     @Override
