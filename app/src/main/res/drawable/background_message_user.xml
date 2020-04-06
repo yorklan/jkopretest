@@ -1,12 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
-    <item>
-        <shape>
-            <solid android:color="#00000000" />
-            <stroke android:width="2dp" android:color="#f1f1f1"/>
-            <corners android:radius="@dimen/radius_medium"/>
-            <padding android:top="@dimen/margin_small" android:bottom="@dimen/margin_small"
-                android:left="@dimen/margin_small" android:right="@dimen/margin_smallest"/>
-        </shape>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_activated="true">
+        <layer-list>
+            <item>
+                <shape>
+                    <solid android:color="#c7c7c7" />
+                    <stroke android:width="2dp" android:color="#f1f1f1"/>
+                    <corners android:radius="@dimen/radius_medium"/>
+                    <padding android:top="@dimen/margin_small" android:bottom="@dimen/margin_small"
+                        android:left="@dimen/margin_small" android:right="@dimen/margin_smallest"/>
+                </shape>
+            </item>
+        </layer-list>
     </item>
-</layer-list>
+    <item android:state_pressed="true">
+        <layer-list>
+            <item>
+                <shape>
+                    <solid android:color="#c7c7c7" />
+                    <stroke android:width="2dp" android:color="#f1f1f1"/>
+                    <corners android:radius="@dimen/radius_medium"/>
+                    <padding android:top="@dimen/margin_small" android:bottom="@dimen/margin_small"
+                        android:left="@dimen/margin_small" android:right="@dimen/margin_smallest"/>
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+    <item>
+        <layer-list>
+            <item>
+                <shape>
+                    <solid android:color="#00000000" />
+                    <stroke android:width="2dp" android:color="#f1f1f1"/>
+                    <corners android:radius="@dimen/radius_medium"/>
+                    <padding android:top="@dimen/margin_small" android:bottom="@dimen/margin_small"
+                        android:left="@dimen/margin_small" android:right="@dimen/margin_smallest"/>
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+
+</selector>

@@ -1,8 +1,7 @@
 package com.example.jkopretest;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.example.jkopretest.data.Chat;
 import com.example.jkopretest.data.source.ChatDataSource;
@@ -34,5 +33,13 @@ class MainPresenter implements MainContract.Presenter{
 
             }
         });
+    }
+
+    @Override
+    public void deleteChat(@Nullable Chat chat) {
+        if(chat!=null){
+            mChatRepository.deleteChat(chat);
+            mMainView.deleteChat(chat);
+        }
     }
 }

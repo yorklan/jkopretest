@@ -91,4 +91,9 @@ public class ChatRemoteDataSource implements ChatDataSource {
     public void saveChatList(List<Chat> chatList) {
 
     }
+
+    @Override
+    public void deleteChat(@NonNull Chat chat) {
+
+    }
 }

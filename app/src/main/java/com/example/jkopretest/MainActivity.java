@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -42,12 +43,6 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(linearLayoutManager);
         mMainAdapter = new MainAdapter();
-        mMainAdapter.setOnItemClickListener(new MainAdapter.OnItemClickListener() {
-            @Override
-            public void onItemLongClick(@NonNull Chat drama) {
-
-            }
-        });
         recyclerView.setAdapter(mMainAdapter);
     }
 
@@ -79,10 +74,23 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         });
     }
 
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+        if(item.getItemId()==R.id.menu_delete){
+            Log.e("deleteChat","1");
+            mMainPresenter.deleteChat(mMainAdapter.getChatChoose());
+        }
+        return super.onContextItemSelected(item);
+    }
 
     @Override
     public void showChatMessage(@NonNull List<Chat> chatList) {
         mMainAdapter.updateData(chatList);
         mMainAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void deleteChat(@NonNull Chat chat) {
+        mMainAdapter.deleteData(chat);
     }
 }

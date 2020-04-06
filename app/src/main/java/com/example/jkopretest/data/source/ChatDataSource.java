@@ -18,4 +18,6 @@ public interface ChatDataSource {
     void getChatList(@NonNull LoadChatsCallback callback);
 
     void saveChatList(List<Chat> chatList);
+
+    void deleteChat(@NonNull Chat chat);
 }

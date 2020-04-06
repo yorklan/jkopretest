@@ -1,12 +1,15 @@
 package com.example.jkopretest;
 
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -18,6 +21,7 @@ import java.util.List;
 public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
     private List<Chat> mChatList = new ArrayList<>();
+    private Chat chatChoose = null;
 
     private final int VIEW_TYPE_USER = 0, VIEW_TYPE_ME = 1;
 
@@ -25,7 +29,7 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
     }
 
-    private class UserViewHolder extends RecyclerView.ViewHolder {
+    private class UserViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
 
         private ImageView imgAvatar;
         private TextView textMessage;
@@ -36,10 +40,17 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
             imgAvatar = itemView.findViewById(R.id.img_user_avatar);
             textMessage = itemView.findViewById(R.id.text_user_message);
             textTime = itemView.findViewById(R.id.text_user_time);
+            textMessage.setLongClickable(true);
+            textMessage.setOnCreateContextMenuListener(this);
+        }
+
+        @Override
+        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+            menu.add(Menu.NONE, R.id.menu_delete, Menu.NONE, R.string.menu_delete);
         }
     }
 
-    private class MeViewHolder extends RecyclerView.ViewHolder {
+    private class MeViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
 
         private ImageView imgRead;
         private TextView textMessage;
@@ -50,6 +61,13 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
             imgRead = itemView.findViewById(R.id.img_me_read);
             textMessage = itemView.findViewById(R.id.text_me_message);
             textTime = itemView.findViewById(R.id.text_me_time);
+            textMessage.setLongClickable(true);
+            textMessage.setOnCreateContextMenuListener(this);
+        }
+
+        @Override
+        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+            menu.add(Menu.NONE, R.id.menu_delete, Menu.NONE, R.string.menu_delete);
         }
     }
 
@@ -85,43 +103,60 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         }
     }
 
-    private void setUserViewHolder(UserViewHolder userViewHolder, Chat chat){
+    private void setUserViewHolder(UserViewHolder userViewHolder, final Chat chat){
         Glide.with(userViewHolder.itemView.getContext())
                 .load(R.drawable.ic_avatar) // fake data
                 .circleCrop()
                 .into(userViewHolder.imgAvatar);
         userViewHolder.textMessage.setText(chat.getMessage());
         userViewHolder.textTime.setText(chat.getTimeString());
+        userViewHolder.textMessage.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                chatChoose = chat;
+                return false;
+            }
+        });
     }
 
-    private void setMeViewHolder(MeViewHolder meViewHolder, Chat chat){
+    private void setMeViewHolder(MeViewHolder meViewHolder, final Chat chat){
         if(chat.isRead()){
             meViewHolder.imgRead.setImageDrawable(meViewHolder.imgRead.getContext().getDrawable(R.drawable.ic_tick));
         }
         meViewHolder.textMessage.setText(chat.getMessage());
         meViewHolder.textTime.setText(chat.getTimeString());
+        meViewHolder.textMessage.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                chatChoose = chat;
+                return false;
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
-        return mChatList.size()-1;
+        return mChatList.size();
     }
 
     /**
      * Public Methods
      **/
-    private OnItemClickListener onItemLongClickListener = null;
-
-    public interface OnItemClickListener {
-        void onItemLongClick(@NonNull Chat drama);
-    }
-
-    void setOnItemClickListener(OnItemClickListener listener) {
-        onItemLongClickListener = listener;
-    }
 
     void updateData(List<Chat> newDramaList) {
         mChatList.clear();
         mChatList.addAll(newDramaList);
+    }
+
+    @Nullable
+    Chat getChatChoose(){
+        return chatChoose;
+    }
+
+    void deleteData(@NonNull Chat chat){
+        int indexStart = mChatList.indexOf(chat);
+        mChatList.remove(chat);
+        notifyItemRemoved(indexStart);
+        notifyItemChanged(indexStart, mChatList.size());
     }
 }

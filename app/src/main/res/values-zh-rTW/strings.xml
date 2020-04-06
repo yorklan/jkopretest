@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">JkoPreTest</string>
-    <string name="menu_delete">delete</string>
+    <string name="menu_delete">刪除</string>
 </resources>
