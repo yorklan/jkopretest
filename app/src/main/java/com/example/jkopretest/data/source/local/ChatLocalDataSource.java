@@ -1,6 +1,8 @@
 package com.example.jkopretest.data.source.local;
 
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import com.example.jkopretest.data.Chat;
@@ -36,17 +38,51 @@ public class ChatLocalDataSource implements ChatDataSource {
     }
 
     @Override
-    public void getChatList(@NonNull LoadChatsCallback callback) {
+    public void getChatList(@NonNull final LoadChatsCallback callback) {
 
+        Log.e("chatData","3");
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                final List<Chat> chatList = mChatDao.getChats();
+                mGlobalExecutors.mainThread().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (chatList != null && !chatList.isEmpty()) {
+                            Log.e("chatData","4");
+                            callback.onChatsLoaded(chatList);
+                        } else {
+                            Log.e("chatData","5");
+                            callback.onDataNotAvailable(false);
+                        }
+                    }
+                });
+            }
+        };
+
+        mGlobalExecutors.diskIO().execute(runnable);
     }
 
     @Override
-    public void saveChatList(List<Chat> chatList) {
-
+    public void saveChatList(final List<Chat> chatList) {
+        Runnable saveRunnable = new Runnable() {
+            @Override
+            public void run() {
+                mChatDao.insertAllChats(chatList);
+            }
+        };
+        mGlobalExecutors.diskIO().execute(saveRunnable);
     }
 
     @Override
-    public void deleteChat(@NonNull Chat chat) {
+    public void deleteChat(@NonNull final Chat chat) {
+        Runnable deleteRunnable = new Runnable() {
+            @Override
+            public void run() {
+                mChatDao.deleteChatByTime(chat.getCreatedAt());
+            }
+        };
 
+        mGlobalExecutors.diskIO().execute(deleteRunnable);
     }
 }

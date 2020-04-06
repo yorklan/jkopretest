@@ -1,5 +1,7 @@
 package com.example.jkopretest.data.source;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import com.example.jkopretest.data.Chat;
@@ -29,17 +31,29 @@ public class ChatRepository implements ChatDataSource{
     }
 
     @Override
-    public void getChatList(@NonNull LoadChatsCallback callback) {
-        mChatRemoteDataSource.getChatList(callback);
+    public void getChatList(@NonNull final LoadChatsCallback callback) {
+        mChatLocalDataSource.getChatList(new LoadChatsCallback() {
+            @Override
+            public void onChatsLoaded(List<Chat> chatList) {
+                Log.e("chatData","1");
+                callback.onChatsLoaded(chatList);
+            }
+
+            @Override
+            public void onDataNotAvailable(boolean isNetworkError) {
+                Log.e("chatData","2");
+                mChatRemoteDataSource.getChatList(callback);
+            }
+        });
     }
 
     @Override
     public void saveChatList(List<Chat> chatList) {
-
+        mChatLocalDataSource.saveChatList(chatList);
     }
 
     @Override
     public void deleteChat(@NonNull Chat chat) {
-
+        mChatLocalDataSource.deleteChat(chat);
     }
 }

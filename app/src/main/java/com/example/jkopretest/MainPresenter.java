@@ -26,6 +26,7 @@ class MainPresenter implements MainContract.Presenter{
             @Override
             public void onChatsLoaded(List<Chat> chatList) {
                 mMainView.showChatMessage(chatList);
+                mChatRepository.saveChatList(chatList);
             }
 
             @Override

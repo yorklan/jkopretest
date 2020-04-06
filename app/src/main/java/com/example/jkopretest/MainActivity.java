@@ -45,14 +45,6 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
         mMainAdapter = new MainAdapter();
         mRecyclerView.setAdapter(mMainAdapter);
-        mRecyclerView.post(new Runnable() {
-            @Override
-            public void run() {
-                if(mLinearLayoutManager.getItemCount()>=mLinearLayoutManager.findLastVisibleItemPosition()){
-                    mRecyclerView.scrollToPosition(mMainAdapter.getItemCount()-1);
-                }
-            }
-        });
     }
 
     private void buildInputBar(){
@@ -95,6 +87,14 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     public void showChatMessage(@NonNull List<Chat> chatList) {
         mMainAdapter.updateData(chatList);
         mMainAdapter.notifyDataSetChanged();
+        mRecyclerView.post(new Runnable() {
+            @Override
+            public void run() {
+                if(mLinearLayoutManager.getItemCount()>=mLinearLayoutManager.findLastVisibleItemPosition()){
+                    mRecyclerView.scrollToPosition(mMainAdapter.getItemCount()-1);
+                }
+            }
+        });
     }
 
     @Override
