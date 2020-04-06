@@ -20,4 +20,6 @@ public interface ChatDataSource {
     void saveChatList(List<Chat> chatList);
 
     void deleteChat(@NonNull Chat chat);
+
+    void insertNewChat(@NonNull Chat chat);
 }

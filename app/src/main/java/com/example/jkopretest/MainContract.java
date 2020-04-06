@@ -13,6 +13,8 @@ public interface MainContract {
 
         void showChatMessage(@NonNull List<Chat> chatList);
 
+        void showChatMessage(@NonNull Chat chat);
+
         void deleteChat(@NonNull Chat chat);
     }
 
@@ -21,5 +23,7 @@ public interface MainContract {
         void getFakeData();
 
         void deleteChat(@Nullable Chat chat);
+
+        void sendChat(@NonNull String message);
     }
 }

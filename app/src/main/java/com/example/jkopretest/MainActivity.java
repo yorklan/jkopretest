@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -27,6 +26,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     private LinearLayoutManager mLinearLayoutManager;
     private RecyclerView mRecyclerView;
 
+    private EditText mEditInput;
     private ImageView mImgSend, mImgRecord;
 
     @Override
@@ -50,8 +50,8 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     private void buildInputBar(){
         mImgRecord = findViewById(R.id.img_record);
         mImgSend = findViewById(R.id.img_send);
-        EditText editInput = findViewById(R.id.edit_input);
-        editInput.addTextChangedListener(new TextWatcher() {
+        mEditInput = findViewById(R.id.edit_input);
+        mEditInput.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -73,6 +73,12 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
 
             }
         });
+        mImgSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mMainPresenter.sendChat(mEditInput.getText().toString());
+            }
+        });
     }
 
     @Override
@@ -86,7 +92,6 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     @Override
     public void showChatMessage(@NonNull List<Chat> chatList) {
         mMainAdapter.updateData(chatList);
-        mMainAdapter.notifyDataSetChanged();
         mRecyclerView.post(new Runnable() {
             @Override
             public void run() {
@@ -95,6 +100,12 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
                 }
             }
         });
+    }
+
+    @Override
+    public void showChatMessage(@NonNull Chat chat) {
+        mMainAdapter.updateData(chat);
+        mRecyclerView.smoothScrollToPosition(mMainAdapter.getItemCount()-1);
     }
 
     @Override

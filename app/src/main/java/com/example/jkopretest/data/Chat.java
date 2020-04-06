@@ -46,8 +46,10 @@ public final class Chat {
      * The constructor to build the data
      *
      * @param createdAt     when this chat was sent
-     * @param id          the user who sent this chat
+     * @param id            the user who sent this message
+     *                      if this message was sent by myself, set this String empty
      * @param avatar        url of the avatar
+     *                      if this message was sent by myself, set this String null
      * @param isRead        has the user read this chat
      */
     public Chat(Date createdAt, @NonNull String id,

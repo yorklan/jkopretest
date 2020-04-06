@@ -56,4 +56,9 @@ public class ChatRepository implements ChatDataSource{
     public void deleteChat(@NonNull Chat chat) {
         mChatLocalDataSource.deleteChat(chat);
     }
+
+    @Override
+    public void insertNewChat(@NonNull Chat chat) {
+        mChatLocalDataSource.insertNewChat(chat);
+    }
 }

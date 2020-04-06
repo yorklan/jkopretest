@@ -23,5 +23,8 @@ public interface ChatDao {
     void insertAllChats(List<Chat> chatList);
 
     @Query("DELETE FROM chat WHERE createdat = :createdAt")
-    int deleteChatByTime(Date createdAt);
+    void deleteChatByTime(Date createdAt);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertChat(Chat chat);
 }

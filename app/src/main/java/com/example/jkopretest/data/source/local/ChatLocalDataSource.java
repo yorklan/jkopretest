@@ -85,4 +85,15 @@ public class ChatLocalDataSource implements ChatDataSource {
 
         mGlobalExecutors.diskIO().execute(deleteRunnable);
     }
+
+    @Override
+    public void insertNewChat(@NonNull final Chat chat) {
+        Runnable saveRunnable = new Runnable() {
+            @Override
+            public void run() {
+                mChatDao.insertChat(chat);
+            }
+        };
+        mGlobalExecutors.diskIO().execute(saveRunnable);
+    }
 }
