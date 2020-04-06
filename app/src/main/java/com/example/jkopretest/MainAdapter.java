@@ -151,8 +151,8 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
     void updateData(Chat chat) {
         mChatList.add(chat);
-        notifyDataSetChanged();
         notifyItemInserted(mChatList.size());
+        notifyItemChanged(mChatList.size(), 1);
     }
 
     @Nullable

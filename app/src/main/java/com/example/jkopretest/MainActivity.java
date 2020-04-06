@@ -77,6 +77,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
             @Override
             public void onClick(View v) {
                 mMainPresenter.sendChat(mEditInput.getText().toString());
+                mEditInput.setText("");
             }
         });
     }

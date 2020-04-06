@@ -4,6 +4,8 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.RawQuery;
+import androidx.sqlite.db.SupportSQLiteQuery;
 
 import com.example.jkopretest.data.Chat;
 
@@ -27,4 +29,7 @@ public interface ChatDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertChat(Chat chat);
+
+    @RawQuery
+    List<Chat> getChatsSort(SupportSQLiteQuery sortQuery);
 }

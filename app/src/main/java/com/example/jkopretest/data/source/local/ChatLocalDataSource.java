@@ -4,6 +4,7 @@ package com.example.jkopretest.data.source.local;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.sqlite.db.SimpleSQLiteQuery;
 
 import com.example.jkopretest.data.Chat;
 import com.example.jkopretest.data.source.ChatDataSource;
@@ -44,7 +45,7 @@ public class ChatLocalDataSource implements ChatDataSource {
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                final List<Chat> chatList = mChatDao.getChats();
+                final List<Chat> chatList = mChatDao.getChatsSort(new SimpleSQLiteQuery("SELECT * FROM chat ORDER BY createdat ASC"));
                 mGlobalExecutors.mainThread().execute(new Runnable() {
                     @Override
                     public void run() {
