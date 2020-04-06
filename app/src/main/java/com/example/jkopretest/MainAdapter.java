@@ -157,6 +157,6 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         int indexStart = mChatList.indexOf(chat);
         mChatList.remove(chat);
         notifyItemRemoved(indexStart);
-        notifyItemChanged(indexStart, mChatList.size());
+        notifyItemChanged(indexStart, mChatList.size()-1);
     }
 }

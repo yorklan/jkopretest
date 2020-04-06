@@ -24,6 +24,8 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     private MainPresenter mMainPresenter;
 
     private MainAdapter mMainAdapter;
+    private LinearLayoutManager mLinearLayoutManager;
+    private RecyclerView mRecyclerView;
 
     private ImageView mImgSend, mImgRecord;
 
@@ -38,12 +40,19 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     }
 
     private void buildRecyclerView(){
-        RecyclerView recyclerView = findViewById(R.id.recycler_view_main);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(linearLayoutManager);
+        mRecyclerView = findViewById(R.id.recycler_view_main);
+        mLinearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        mRecyclerView.setLayoutManager(mLinearLayoutManager);
         mMainAdapter = new MainAdapter();
-        recyclerView.setAdapter(mMainAdapter);
+        mRecyclerView.setAdapter(mMainAdapter);
+        mRecyclerView.post(new Runnable() {
+            @Override
+            public void run() {
+                if(mLinearLayoutManager.getItemCount()>=mLinearLayoutManager.findLastVisibleItemPosition()){
+                    mRecyclerView.scrollToPosition(mMainAdapter.getItemCount()-1);
+                }
+            }
+        });
     }
 
     private void buildInputBar(){
@@ -77,7 +86,6 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
         if(item.getItemId()==R.id.menu_delete){
-            Log.e("deleteChat","1");
             mMainPresenter.deleteChat(mMainAdapter.getChatChoose());
         }
         return super.onContextItemSelected(item);
