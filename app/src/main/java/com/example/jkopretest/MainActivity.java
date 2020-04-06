@@ -2,6 +2,7 @@ package com.example.jkopretest;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -88,6 +89,12 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
             mMainPresenter.deleteChat(mMainAdapter.getChatChoose());
         }
         return super.onContextItemSelected(item);
+    }
+
+    @Override
+    public void showUserName(@NonNull String userName) {
+        Toolbar toolbar = findViewById(R.id.toolbar_main);
+        toolbar.setTitle(userName);
     }
 
     @Override

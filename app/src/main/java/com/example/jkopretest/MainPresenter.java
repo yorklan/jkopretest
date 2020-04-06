@@ -25,9 +25,10 @@ class MainPresenter implements MainContract.Presenter {
     public void getFakeData() {
         mChatRepository.getChatList(new ChatDataSource.LoadChatsCallback() {
             @Override
-            public void onChatsLoaded(List<Chat> chatList) {
+            public void onChatsLoaded(List<Chat> chatList,@NonNull String userName) {
+                mMainView.showUserName(userName);
                 mMainView.showChatMessage(chatList);
-                mChatRepository.saveChatList(chatList);
+                mChatRepository.saveChatList(chatList, userName);
             }
 
             @Override

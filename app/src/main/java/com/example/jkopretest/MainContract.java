@@ -11,6 +11,8 @@ public interface MainContract {
 
     interface View {
 
+        void showUserName(@NonNull String userName);
+
         void showChatMessage(@NonNull List<Chat> chatList);
 
         void showChatMessage(@NonNull Chat chat);

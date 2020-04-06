@@ -32,8 +32,8 @@ public class ChatRepository implements ChatDataSource{
     public void getChatList(@NonNull final LoadChatsCallback callback) {
         mChatLocalDataSource.getChatList(new LoadChatsCallback() {
             @Override
-            public void onChatsLoaded(List<Chat> chatList) {
-                callback.onChatsLoaded(chatList);
+            public void onChatsLoaded(List<Chat> chatList, String userName) {
+                callback.onChatsLoaded(chatList, userName);
             }
 
             @Override
@@ -44,8 +44,8 @@ public class ChatRepository implements ChatDataSource{
     }
 
     @Override
-    public void saveChatList(List<Chat> chatList) {
-        mChatLocalDataSource.saveChatList(chatList);
+    public void saveChatList(List<Chat> chatList, String userName) {
+        mChatLocalDataSource.saveChatList(chatList, userName);
     }
 
     @Override

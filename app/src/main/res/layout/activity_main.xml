@@ -81,7 +81,7 @@
     <EditText
         android:id="@+id/edit_input"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_small"
         android:layout_marginEnd="@dimen/margin_small"
         android:paddingStart="@dimen/margin_medium"
@@ -89,6 +89,7 @@
         android:background="@drawable/background_main_input"
         android:importantForAutofill="no"
         android:inputType="text"
+        android:textSize="@dimen/text_16"
         app:layout_constraintBottom_toBottomOf="@+id/imageView"
         app:layout_constraintEnd_toStartOf="@+id/img_record"
         app:layout_constraintStart_toEndOf="@+id/imageView"

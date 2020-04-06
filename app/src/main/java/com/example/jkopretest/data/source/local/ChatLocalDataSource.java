@@ -1,6 +1,8 @@
 package com.example.jkopretest.data.source.local;
 
 
+import android.content.SharedPreferences;
+
 import androidx.annotation.NonNull;
 import androidx.sqlite.db.SimpleSQLiteQuery;
 
@@ -18,18 +20,24 @@ public class ChatLocalDataSource implements ChatDataSource {
 
     private GlobalExecutors mGlobalExecutors;
 
+    private SharedPreferences mSharedPreferencesUser;
+    private final String KEY_USER_NAME = "userName";
+
     private ChatLocalDataSource(@NonNull GlobalExecutors globalExecutors,
-                                @NonNull ChatDao chatDao) {
+                                @NonNull ChatDao chatDao,
+                                @NonNull SharedPreferences sharedPreferences) {
         mGlobalExecutors = globalExecutors;
         mChatDao = chatDao;
+        mSharedPreferencesUser = sharedPreferences;
     }
 
     public static ChatLocalDataSource getInstance(@NonNull GlobalExecutors globalExecutors,
-                                                    @NonNull ChatDao chatDao) {
+                                                    @NonNull ChatDao chatDao,
+                                                    @NonNull SharedPreferences sharedPreferences) {
         if (mInstance == null) {
             synchronized (ChatLocalDataSource.class) {
                 if (mInstance == null) {
-                    mInstance = new ChatLocalDataSource(globalExecutors, chatDao);
+                    mInstance = new ChatLocalDataSource(globalExecutors, chatDao, sharedPreferences);
                 }
             }
         }
@@ -47,7 +55,7 @@ public class ChatLocalDataSource implements ChatDataSource {
                     @Override
                     public void run() {
                         if (chatList != null && !chatList.isEmpty()) {
-                            callback.onChatsLoaded(chatList);
+                            callback.onChatsLoaded(chatList, mSharedPreferencesUser.getString(KEY_USER_NAME, ""));
                         } else {
                             callback.onDataNotAvailable(false);
                         }
@@ -60,7 +68,8 @@ public class ChatLocalDataSource implements ChatDataSource {
     }
 
     @Override
-    public void saveChatList(final List<Chat> chatList) {
+    public void saveChatList(final List<Chat> chatList, String userName) {
+        mSharedPreferencesUser.edit().putString(KEY_USER_NAME, userName).apply();
         Runnable saveRunnable = new Runnable() {
             @Override
             public void run() {

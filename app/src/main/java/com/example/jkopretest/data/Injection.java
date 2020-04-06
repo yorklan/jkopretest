@@ -16,6 +16,6 @@ public class Injection {
         JkoTestDatabase database = JkoTestDatabase.getInstance(context);
         return ChatRepository.getInstance(
                 ChatRemoteDataSource.getInstance(context),
-                ChatLocalDataSource.getInstance(new GlobalExecutors(), database.chatDao()));
+                ChatLocalDataSource.getInstance(new GlobalExecutors(), database.chatDao(), context.getSharedPreferences("JkoTest.User", Context.MODE_PRIVATE)));
     }
 }

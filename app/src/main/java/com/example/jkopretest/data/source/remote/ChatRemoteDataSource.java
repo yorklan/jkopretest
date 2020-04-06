@@ -15,7 +15,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.text.ParseException;
@@ -48,7 +47,7 @@ public class ChatRemoteDataSource implements ChatDataSource {
             GsonBuilder b = new GsonBuilder();
             Gson gson = b.registerTypeAdapter(Date.class, new DateDeserializer()).create();
             FakeData fakeData = gson.fromJson(jsonString, FakeData.class);
-            callback.onChatsLoaded(fakeData.getData());
+            callback.onChatsLoaded(fakeData.getData(), fakeData.getName());
         }catch (Exception e){
             callback.onDataNotAvailable(true);
         }
@@ -88,7 +87,7 @@ public class ChatRemoteDataSource implements ChatDataSource {
     }
 
     @Override
-    public void saveChatList(List<Chat> chatList) {
+    public void saveChatList(List<Chat> chatList, String userName) {
 
     }
 

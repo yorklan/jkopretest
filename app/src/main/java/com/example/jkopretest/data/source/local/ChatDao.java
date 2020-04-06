@@ -18,9 +18,6 @@ import java.util.List;
 @Dao
 public interface ChatDao {
 
-    @Query("SELECT * FROM chat")
-    List<Chat> getChats();
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAllChats(List<Chat> chatList);
 
