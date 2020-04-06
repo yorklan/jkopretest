@@ -1,8 +1,6 @@
 package com.example.jkopretest.data.source.local;
 
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.sqlite.db.SimpleSQLiteQuery;
 
@@ -41,7 +39,6 @@ public class ChatLocalDataSource implements ChatDataSource {
     @Override
     public void getChatList(@NonNull final LoadChatsCallback callback) {
 
-        Log.e("chatData","3");
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
@@ -50,10 +47,8 @@ public class ChatLocalDataSource implements ChatDataSource {
                     @Override
                     public void run() {
                         if (chatList != null && !chatList.isEmpty()) {
-                            Log.e("chatData","4");
                             callback.onChatsLoaded(chatList);
                         } else {
-                            Log.e("chatData","5");
                             callback.onDataNotAvailable(false);
                         }
                     }

@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
@@ -42,6 +43,9 @@ public final class Chat {
     @SerializedName("is_read")
     private final boolean isRead;
 
+    // local attribute
+    private boolean isGroup;
+
     /**
      * The constructor to build the data
      *
@@ -50,15 +54,28 @@ public final class Chat {
      *                      if this message was sent by myself, set this String empty
      * @param avatar        url of the avatar
      *                      if this message was sent by myself, set this String null
-     * @param isRead        has the user read this chat
+     * @param isRead        has the user read this chat, set all true
+     * @param isGroup       has the view group divider
      */
     public Chat(Date createdAt, @NonNull String id,
-                 @NonNull String message, @Nullable String avatar, boolean isRead) {
+                @NonNull String message, @Nullable String avatar,
+                boolean isRead, boolean isGroup) {
         this.createdAt = createdAt;
         this.id = id;
         this.message = message;
         this.avatar = avatar;
         this.isRead = isRead;
+        this.isGroup = isGroup;
+    }
+
+    @Ignore
+    public Chat(Date createdAt, @NonNull String message){
+        this(createdAt, "", message, null, true, false);
+    }
+
+    @Ignore
+    public Chat(Date createdAt){
+        this(createdAt, "", "", null, true, true);
     }
 
     public Date getCreatedAt() {
@@ -88,8 +105,17 @@ public final class Chat {
         return id.isEmpty();
     }
 
+    public boolean isGroup() {
+        return isGroup;
+    }
+
     public String getTimeString() {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
+        return simpleDateFormat.format(createdAt);
+    }
+
+    public String getTimeGroupString(){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM / dd", Locale.getDefault());
         return simpleDateFormat.format(createdAt);
     }
 }

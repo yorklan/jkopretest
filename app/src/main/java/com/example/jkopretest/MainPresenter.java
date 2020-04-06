@@ -1,7 +1,5 @@
 package com.example.jkopretest;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -12,14 +10,14 @@ import com.example.jkopretest.data.source.ChatRepository;
 import java.util.Calendar;
 import java.util.List;
 
-class MainPresenter implements MainContract.Presenter{
+class MainPresenter implements MainContract.Presenter {
 
     private final MainContract.View mMainView;
 
     private final ChatRepository mChatRepository;
 
-    MainPresenter(@NonNull ChatRepository chatRepository, @NonNull MainContract.View view){
-        mMainView  = view;
+    MainPresenter(@NonNull ChatRepository chatRepository, @NonNull MainContract.View view) {
+        mMainView = view;
         mChatRepository = chatRepository;
     }
 
@@ -41,7 +39,7 @@ class MainPresenter implements MainContract.Presenter{
 
     @Override
     public void deleteChat(@Nullable Chat chat) {
-        if(chat!=null){
+        if (chat != null) {
             mChatRepository.deleteChat(chat);
             mMainView.deleteChat(chat);
         }
@@ -49,8 +47,7 @@ class MainPresenter implements MainContract.Presenter{
 
     @Override
     public void sendChat(@NonNull String message) {
-        Log.e("sendChat","1");
-        Chat newChat = new Chat(Calendar.getInstance().getTime(), "",message,null,true);
+        Chat newChat = new Chat(Calendar.getInstance().getTime(), message);
         mMainView.showChatMessage(newChat);
         mChatRepository.insertNewChat(newChat);
     }

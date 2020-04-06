@@ -16,6 +16,8 @@ import com.bumptech.glide.Glide;
 import com.example.jkopretest.data.Chat;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
@@ -23,10 +25,20 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     private List<Chat> mChatList = new ArrayList<>();
     private Chat chatChoose = null;
 
-    private final int VIEW_TYPE_USER = 0, VIEW_TYPE_ME = 1;
+    private final int VIEW_TYPE_TIME = 0, VIEW_TYPE_USER = 1, VIEW_TYPE_ME = 2;
 
     MainAdapter(){
 
+    }
+
+    private class TimeViewHolder extends RecyclerView.ViewHolder {
+
+        TextView textTime;
+
+        TimeViewHolder(@NonNull View itemView) {
+            super(itemView);
+            textTime = itemView.findViewById(R.id.text_card_time);
+        }
     }
 
     private class UserViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
@@ -73,7 +85,9 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
     @Override
     public int getItemViewType(int position) {
-        if(mChatList.get(position).isMe()){
+        if(mChatList.get(position).isGroup()){
+            return VIEW_TYPE_TIME;
+        }else if(mChatList.get(position).isMe()){
             return VIEW_TYPE_ME;
         }else {
             return VIEW_TYPE_USER;
@@ -88,9 +102,13 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
                 return new MeViewHolder(LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.card_me, parent, false));
             case VIEW_TYPE_USER:
-            default:
                 return new UserViewHolder(LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.card_user, parent, false));
+            case VIEW_TYPE_TIME:
+            default:
+                return new TimeViewHolder(LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.card_time, parent, false));
+
         }
     }
 
@@ -100,6 +118,8 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
             setUserViewHolder((UserViewHolder) holder, mChatList.get(position));
         } else if(holder instanceof MeViewHolder){
             setMeViewHolder((MeViewHolder) holder, mChatList.get(position));
+        } else if(holder instanceof TimeViewHolder){
+            setTimeViewHolder((TimeViewHolder) holder, mChatList.get(position));
         }
     }
 
@@ -134,6 +154,12 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         });
     }
 
+    private void setTimeViewHolder(TimeViewHolder timeViewHolder, final Chat chat){
+        if(chat!=null && chat.isGroup()){
+            timeViewHolder.textTime.setText(chat.getTimeGroupString());
+        }
+    }
+
     @Override
     public int getItemCount() {
         return mChatList.size();
@@ -143,16 +169,40 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
      * Public Methods
      **/
 
-    void updateData(List<Chat> newDramaList) {
+    void updateData(@NonNull List<Chat> newChatList) {
         mChatList.clear();
-        mChatList.addAll(newDramaList);
+        for(int i=0; i<newChatList.size(); i++){
+            if(i==0){
+                mChatList.add(new Chat(newChatList.get(i).getCreatedAt()));
+                mChatList.add(newChatList.get(i));
+                continue;
+            }
+            if(isNotSameDay(newChatList.get(i).getCreatedAt(), newChatList.get(i - 1).getCreatedAt())){
+                mChatList.add(new Chat(newChatList.get(i).getCreatedAt()));
+            }
+            mChatList.add(newChatList.get(i));
+        }
         notifyDataSetChanged();
     }
 
+    private boolean isNotSameDay(Date date1, Date date2){
+        Calendar cal1 = Calendar.getInstance();
+        Calendar cal2 = Calendar.getInstance();
+        cal1.setTime(date1);
+        cal2.setTime(date2);
+        return cal1.get(Calendar.DAY_OF_YEAR) != cal2.get(Calendar.DAY_OF_YEAR) ||
+                cal1.get(Calendar.YEAR) != cal2.get(Calendar.YEAR);
+    }
+
     void updateData(Chat chat) {
+        int payload = 1;
+        if(isNotSameDay(mChatList.get(mChatList.size() - 1).getCreatedAt(), chat.getCreatedAt())){
+            mChatList.add(new Chat(chat.getCreatedAt()));
+            payload++;
+        }
         mChatList.add(chat);
         notifyItemInserted(mChatList.size());
-        notifyItemChanged(mChatList.size(), 1);
+        notifyItemChanged(mChatList.size(), payload);
     }
 
     @Nullable
@@ -161,9 +211,16 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     }
 
     void deleteData(@NonNull Chat chat){
-        int indexStart = mChatList.indexOf(chat);
-        mChatList.remove(chat);
-        notifyItemRemoved(indexStart);
-        notifyItemChanged(indexStart, mChatList.size()-1);
+        int indexDelete = mChatList.indexOf(chat);
+        if(mChatList.get(indexDelete-1).isGroup() && (indexDelete+1) > (mChatList.size()-1)){
+            mChatList.remove(indexDelete);
+            notifyItemRemoved(indexDelete);
+            mChatList.remove(indexDelete-1);
+            notifyItemRemoved(indexDelete-1);
+        }else {
+            mChatList.remove(indexDelete);
+            notifyItemRemoved(indexDelete);
+        }
+        notifyItemChanged(indexDelete, mChatList.size()-1);
     }
 }

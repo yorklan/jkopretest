@@ -1,7 +1,6 @@
 package com.example.jkopretest.data.source.remote;
 
 import android.content.Context;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -45,14 +44,12 @@ public class ChatRemoteDataSource implements ChatDataSource {
     @Override
     public void getChatList(@NonNull LoadChatsCallback callback) {
         try {
-            Log.e("chatData","6");
             String jsonString = readTextFile(XmlFileInputStream);
             GsonBuilder b = new GsonBuilder();
             Gson gson = b.registerTypeAdapter(Date.class, new DateDeserializer()).create();
             FakeData fakeData = gson.fromJson(jsonString, FakeData.class);
             callback.onChatsLoaded(fakeData.getData());
         }catch (Exception e){
-            Log.e("chatData","7");
             callback.onDataNotAvailable(true);
         }
     }
